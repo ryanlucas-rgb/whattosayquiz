@@ -151,7 +151,13 @@ function buildAndAppendNewCard(stepData) {
                     './assets/transicao.png',
                     './assets/sabedoria.png'
                 ],
-                3: ['\uD83D\uDDE3\uFE0F', '\uD83E\uDDE9', '\uD83C\uDFAD', '\uD83D\uDCCA', '\u2728'],
+                3: [
+                    './assets/falar.png',
+                    './assets/quebra-cabeca.png',
+                    './assets/igualdade-de-genero.png',
+                    './assets/grafico-de-barras.png',
+                    './assets/estrelas-de-natal.png'
+                ],
                 4: ['\uD83C\uDFC3', '\uD83E\uDDE0', '\uD83D\uDCC9', '\uD83D\uDE30', '\uD83C\uDFAF'],
                 5: ['\uD83D\uDCA1', '\uD83E\uDDF1', '\uD83D\uDCAA', '\uD83D\uDCC8', '\u2705']
             };
