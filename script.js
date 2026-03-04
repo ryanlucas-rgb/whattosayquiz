@@ -145,11 +145,11 @@ function buildAndAppendNewCard(stepData) {
             // ---- Other questions: standard modern button layout ----
             const iconMap = {
                 2: [
-                    './assets/q2-student.svg',
-                    './assets/q2-growth.svg',
-                    './assets/q2-career.svg',
-                    './assets/q2-transition.svg',
-                    './assets/q2-experienced.svg'
+                    './assets/recem-formado.png',
+                    './assets/plantar.png',
+                    './assets/mala-de-viagem.png',
+                    './assets/transicao.png',
+                    './assets/sabedoria.png'
                 ],
                 3: ['\uD83D\uDDE3\uFE0F', '\uD83E\uDDE9', '\uD83C\uDFAD', '\uD83D\uDCCA', '\u2728'],
                 4: ['\uD83C\uDFC3', '\uD83E\uDDE0', '\uD83D\uDCC9', '\uD83D\uDE30', '\uD83C\uDFAF'],
@@ -160,7 +160,7 @@ function buildAndAppendNewCard(stepData) {
 
             const optionsHtml = stepData.options.map((opt, index) => {
                 const icon = icons[index] || '\uD83D\uDD39';
-                const isImage = icon.includes('.svg');
+                const isImage = icon.includes('.svg') || icon.includes('.png');
                 const iconHtml = isImage ? `<img src="${icon}" alt="">` : icon;
 
                 return `
