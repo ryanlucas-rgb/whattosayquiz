@@ -165,7 +165,13 @@ function buildAndAppendNewCard(stepData) {
                     './assets/pressao.png',
                     './assets/alvo.png'
                 ],
-                5: ['\uD83D\uDCA1', '\uD83E\uDDF1', '\uD83D\uDCAA', '\uD83D\uDCC8', '\u2705']
+                5: [
+                    './assets/lampada-de-ideia.png',
+                    './assets/parede-de-tijolos.png',
+                    './assets/musculo.png',
+                    './assets/claro.png',
+                    './assets/aceitar.png'
+                ]
             };
 
             const icons = iconMap[currentQuestionNumber] || [];
