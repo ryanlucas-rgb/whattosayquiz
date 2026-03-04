@@ -41,6 +41,8 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    /* Remove o seletor/cursor de digitação piscante em elementos de texto */
+    caret-color: transparent !important;
 }
 
 html {
@@ -57,6 +59,11 @@ body {
     justify-content: center;
     align-items: flex-start;
     overflow-x: hidden;
+    /* Desativa a seleção de texto para evitar que o cursor de digitação apareça ao clicar */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .app-container {
