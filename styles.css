@@ -315,9 +315,18 @@ body {
 
 .option-icon-modern {
     font-size: 1.6rem;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+}
+
+.option-icon-modern img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
 }
 
 .option-radio-circle {

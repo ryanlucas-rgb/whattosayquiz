@@ -144,7 +144,13 @@ function buildAndAppendNewCard(stepData) {
         } else {
             // ---- Other questions: standard modern button layout ----
             const iconMap = {
-                2: ['\uD83C\uDF93', '\uD83C\uDF31', '\uD83D\uDCBC', '\uD83D\uDD04', '\uD83D\uDC51'],
+                2: [
+                    './assets/q2-student.svg',
+                    './assets/q2-growth.svg',
+                    './assets/q2-career.svg',
+                    './assets/q2-transition.svg',
+                    './assets/q2-experienced.svg'
+                ],
                 3: ['\uD83D\uDDE3\uFE0F', '\uD83E\uDDE9', '\uD83C\uDFAD', '\uD83D\uDCCA', '\u2728'],
                 4: ['\uD83C\uDFC3', '\uD83E\uDDE0', '\uD83D\uDCC9', '\uD83D\uDE30', '\uD83C\uDFAF'],
                 5: ['\uD83D\uDCA1', '\uD83E\uDDF1', '\uD83D\uDCAA', '\uD83D\uDCC8', '\u2705']
@@ -152,15 +158,20 @@ function buildAndAppendNewCard(stepData) {
 
             const icons = iconMap[currentQuestionNumber] || [];
 
-            const optionsHtml = stepData.options.map((opt, index) => `
+            const optionsHtml = stepData.options.map((opt, index) => {
+                const icon = icons[index] || '\uD83D\uDD39';
+                const isImage = icon.includes('.svg');
+                const iconHtml = isImage ? `<img src="${icon}" alt="">` : icon;
+
+                return `
                 <button class="btn-option-modern" onclick="handleSelect('${index}')">
                     <div class="option-content-left">
-                        <span class="option-icon-modern">${icons[index] || '\uD83D\uDD39'}</span>
+                        <span class="option-icon-modern">${iconHtml}</span>
                         <span>${opt}</span>
                     </div>
                     <div class="option-radio-circle"></div>
                 </button>
-            `).join('');
+            `}).join('');
 
             card.innerHTML = `
                 <div class="question-counter">${currentQuestionNumber} <span class="total">/ ${totalQuestions}</span></div>
