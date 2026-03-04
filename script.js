@@ -158,7 +158,13 @@ function buildAndAppendNewCard(stepData) {
                     './assets/grafico-de-barras.png',
                     './assets/estrelas-de-natal.png'
                 ],
-                4: ['\uD83C\uDFC3', '\uD83E\uDDE0', '\uD83D\uDCC9', '\uD83D\uDE30', '\uD83C\uDFAF'],
+                4: [
+                    './assets/silhueta-do-corredor-correndo-rapido.png',
+                    './assets/cerebro.png',
+                    './assets/diminuir.png',
+                    './assets/pressao.png',
+                    './assets/alvo.png'
+                ],
                 5: ['\uD83D\uDCA1', '\uD83E\uDDF1', '\uD83D\uDCAA', '\uD83D\uDCC8', '\u2705']
             };
 
