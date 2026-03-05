@@ -456,8 +456,8 @@ window.addEventListener('scroll', () => {
     if (popup && ctaButton) {
         const buttonRect = ctaButton.getBoundingClientRect();
 
-        // Trigger fade out much earlier (400px from bottom) to ensure it's gone by the time it reaches the button
-        if (buttonRect.top < window.innerHeight - 400) {
+        // Corrected trigger: window.innerHeight - 50 means as soon as the button appears at the bottom
+        if (buttonRect.top < window.innerHeight - 50) {
             popup.classList.add('hidden');
         } else {
             popup.classList.remove('hidden');
