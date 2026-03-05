@@ -702,49 +702,73 @@ body {
     /* Base for absolute positioning */
 }
 
-/* ---- SCROLL INDICATOR ARROW ---- */
-.cta-scroll-indicator {
+/* ---- SCROLL INDICATOR POPUP (Floating Bubble) ---- */
+.cta-scroll-popup {
     position: absolute;
-    right: 5px;
-    bottom: 440px;
-    /* Positioned near the bottom of the checklist */
-    z-index: 20;
+    right: 15px;
+    bottom: 435px;
+    /* Aligned with the bottom of the checklist */
+    width: 48px;
+    height: 48px;
+    background: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(23, 56, 216, 0.15),
+        0 4px 10px rgba(0, 0, 0, 0.05);
+    z-index: 50;
     pointer-events: none;
+    border: 1px solid #f1f5f9;
+    /* Entry animation for the "pop up" feel */
+    animation: popupScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 .cta-pulsing-arrow {
-    width: 32px;
-    /* Agradavel size */
+    width: 24px;
     height: auto;
     /* Color: #EF4444 */
     filter: brightness(0) saturate(100%) invert(38%) sepia(88%) saturate(3020%) hue-rotate(341deg) brightness(98%) contrast(93%);
-    animation: calmPulse 3s ease-in-out infinite;
+    animation: calmPulseScroll 2.5s ease-in-out infinite;
 }
 
-@keyframes calmPulse {
+@keyframes popupScale {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes calmPulseScroll {
 
     0%,
     100% {
-        opacity: 0.3;
-        transform: translateY(0);
+        opacity: 0.4;
+        transform: translateY(-2px);
     }
 
     50% {
         opacity: 1;
-        transform: translateY(10px);
-        /* Subtle downward movement too */
+        transform: translateY(4px);
     }
 }
 
-/* Adjust position for mobile */
+/* Adjust position for mobile to match the red circle area */
 @media (max-width: 640px) {
-    .cta-scroll-indicator {
-        right: 0px;
-        bottom: 390px;
+    .cta-scroll-popup {
+        right: 10px;
+        bottom: 385px;
+        width: 42px;
+        height: 42px;
     }
 
     .cta-pulsing-arrow {
-        width: 28px;
+        width: 20px;
     }
 }
 
