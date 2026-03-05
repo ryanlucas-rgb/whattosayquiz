@@ -698,7 +698,56 @@ body {
 .cta-dark-container {
     max-width: 480px;
     margin: 0 auto;
+    position: relative;
+    /* Base for absolute positioning */
 }
+
+/* ---- SCROLL INDICATOR ARROW ---- */
+.cta-scroll-indicator {
+    position: absolute;
+    right: 5px;
+    bottom: 440px;
+    /* Positioned near the bottom of the checklist */
+    z-index: 20;
+    pointer-events: none;
+}
+
+.cta-pulsing-arrow {
+    width: 32px;
+    /* Agradavel size */
+    height: auto;
+    /* Color: #EF4444 */
+    filter: brightness(0) saturate(100%) invert(38%) sepia(88%) saturate(3020%) hue-rotate(341deg) brightness(98%) contrast(93%);
+    animation: calmPulse 3s ease-in-out infinite;
+}
+
+@keyframes calmPulse {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: translateY(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(10px);
+        /* Subtle downward movement too */
+    }
+}
+
+/* Adjust position for mobile */
+@media (max-width: 640px) {
+    .cta-scroll-indicator {
+        right: 0px;
+        bottom: 390px;
+    }
+
+    .cta-pulsing-arrow {
+        width: 28px;
+    }
+}
+
 
 /* ---- HEADLINE ---- */
 .cta-headline {

@@ -253,6 +253,11 @@ function buildAndAppendNewCard(stepData) {
                     <li><div class="cta-check"></div> 7-day money-back guarantee</li>
                 </ul>
 
+                <!-- Pulsing Scroll Arrow -->
+                <div class="cta-scroll-indicator">
+                    <img src="./assets/simbolo-de-setas-duplas-para-a-direita-para-avancar.png" alt="Scroll down" class="cta-pulsing-arrow">
+                </div>
+
                 <div class="cta-divider-thin"></div>
 
                 <!-- Product Mockup Image -->
