@@ -253,10 +253,7 @@ function buildAndAppendNewCard(stepData) {
                     <li><div class="cta-check"></div> 7-day money-back guarantee</li>
                 </ul>
 
-                <!-- Pulsing Scroll Arrow Popup -->
-                <div class="cta-scroll-popup">
-                    <img src="./assets/simbolo-de-setas-duplas-para-a-direita-para-avancar.png" alt="Scroll down" class="cta-pulsing-arrow">
-                </div>
+                </ul>
 
                 <div class="cta-divider-thin"></div>
 
@@ -349,6 +346,20 @@ function updateProgress() {
         // Hide the header immediately on CTA page
         header.style.opacity = '0';
         header.style.display = 'none';
+
+        // Manage Global Scroll Popup
+        if (!document.querySelector('.cta-scroll-popup')) {
+            const popup = document.createElement('div');
+            popup.className = 'cta-scroll-popup';
+            popup.innerHTML = `<img src="./assets/simbolo-de-setas-duplas-para-a-direita-para-avancar.png" alt="Scroll down" class="cta-pulsing-arrow">`;
+            document.body.appendChild(popup);
+        }
+    }
+
+    // Remove popup if NOT on CTA page
+    if (quizData[currentStep].type !== 'postquiz-cta') {
+        const existingPopup = document.querySelector('.cta-scroll-popup');
+        if (existingPopup) existingPopup.remove();
     }
 }
 
