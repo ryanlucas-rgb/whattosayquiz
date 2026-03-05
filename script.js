@@ -447,3 +447,20 @@ function submitOffer() {
 document.addEventListener('DOMContentLoaded', () => {
     renderStep();
 });
+
+// Scroll Listener for CTA Popup fade out
+window.addEventListener('scroll', () => {
+    const popup = document.querySelector('.cta-scroll-popup');
+    const ctaButton = document.querySelector('.cta-button-main');
+
+    if (popup && ctaButton) {
+        const buttonRect = ctaButton.getBoundingClientRect();
+        // Fades out as the button approaches the popup's area at the bottom
+        if (buttonRect.top < window.innerHeight - 100) {
+            popup.style.opacity = '0';
+            popup.style.pointerEvents = 'none';
+        } else {
+            popup.style.opacity = '1';
+        }
+    }
+});
