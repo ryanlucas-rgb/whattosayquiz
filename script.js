@@ -461,7 +461,10 @@ function initCTAObserver() {
                 popup.classList.remove('hidden');
             }
         });
-    }, { threshold: 0.1 });
+    }, {
+        threshold: 0, // Trigger immediately when even 1px shows
+        rootMargin: '0px 0px -100px 0px' // Advancing the fade out even more
+    });
 
     // Since the button is dynamic, we need to observe it whenever it appears
     const checkExist = setInterval(() => {
@@ -470,7 +473,7 @@ function initCTAObserver() {
             observer.observe(ctaButton);
             clearInterval(checkExist);
         }
-    }, 500);
+    }, 200); // Faster check
 }
 
 initCTAObserver();
