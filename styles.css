@@ -702,44 +702,47 @@ body {
     /* Base for absolute positioning */
 }
 
-/* ---- SCROLL INDICATOR POPUP (Floating Bubble) ---- */
+/* ---- SCROLL INDICATOR POPUP (Fixed Floating Bubble) ---- */
 .cta-scroll-popup {
-    position: absolute;
-    right: 15px;
-    bottom: 435px;
-    /* Aligned with the bottom of the checklist */
-    width: 48px;
-    height: 48px;
+    position: fixed;
+    /* Fixed to the screen, not the content */
+    right: 20px;
+    bottom: 30px;
+    width: 56px;
+    height: 56px;
     background: #ffffff;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 25px rgba(23, 56, 216, 0.15),
-        0 4px 10px rgba(0, 0, 0, 0.05);
-    z-index: 50;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2),
+        0 0 0 4px rgba(239, 68, 68, 0.1);
+    /* Subtle red glow */
+    z-index: 99999;
+    /* On top of everything */
     pointer-events: none;
-    border: 1px solid #f1f5f9;
-    /* Entry animation for the "pop up" feel */
-    animation: popupScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    border: 2px solid #EF4444;
+    /* More visibility with red border */
+    /* Entry animation */
+    animation: popupScalePulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 .cta-pulsing-arrow {
-    width: 24px;
+    width: 26px;
     height: auto;
     /* Color: #EF4444 */
     filter: brightness(0) saturate(100%) invert(38%) sepia(88%) saturate(3020%) hue-rotate(341deg) brightness(98%) contrast(93%);
-    animation: calmPulseScroll 2.5s ease-in-out infinite;
+    animation: calmPulseScroll 2.2s ease-in-out infinite;
 }
 
-@keyframes popupScale {
+@keyframes popupScalePulse {
     from {
-        transform: scale(0);
+        transform: scale(0) translateY(50px);
         opacity: 0;
     }
 
     to {
-        transform: scale(1);
+        transform: scale(1) translateY(0);
         opacity: 1;
     }
 }
@@ -748,27 +751,28 @@ body {
 
     0%,
     100% {
-        opacity: 0.4;
-        transform: translateY(-2px);
+        opacity: 0.5;
+        transform: translateY(-3px);
     }
 
     50% {
         opacity: 1;
-        transform: translateY(4px);
+        transform: translateY(5px);
     }
 }
 
-/* Adjust position for mobile to match the red circle area */
+/* Adjust for even better mobile visibility */
 @media (max-width: 640px) {
     .cta-scroll-popup {
-        right: 10px;
-        bottom: 385px;
-        width: 42px;
-        height: 42px;
+        right: 15px;
+        bottom: 25px;
+        width: 50px;
+        height: 50px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     }
 
     .cta-pulsing-arrow {
-        width: 20px;
+        width: 22px;
     }
 }
 
