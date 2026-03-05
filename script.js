@@ -90,10 +90,13 @@ function renderStep() {
             oldCard.remove();
             buildAndAppendNewCard(stepData);
             updateProgress();
+            // Ensure the view is at the top when new content appears
+            window.scrollTo(0, 0);
         }, 300);
     } else {
         buildAndAppendNewCard(stepData);
         updateProgress();
+        window.scrollTo(0, 0);
     }
 }
 
