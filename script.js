@@ -448,19 +448,29 @@ document.addEventListener('DOMContentLoaded', () => {
     renderStep();
 });
 
-// Scroll Listener for CTA Popup fade out
-window.addEventListener('scroll', () => {
-    const popup = document.querySelector('.cta-scroll-popup');
-    const ctaButton = document.querySelector('.cta-button-main');
+// Setup Observer for the CTA Popup
+function initCTAObserver() {
+    const observer = new IntersectionObserver((entries) => {
+        const popup = document.querySelector('.cta-scroll-popup');
+        if (!popup) return;
 
-    if (popup && ctaButton) {
-        const buttonRect = ctaButton.getBoundingClientRect();
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                popup.classList.add('hidden');
+            } else {
+                popup.classList.remove('hidden');
+            }
+        });
+    }, { threshold: 0.1 });
 
-        // Corrected trigger: window.innerHeight - 50 means as soon as the button appears at the bottom
-        if (buttonRect.top < window.innerHeight - 50) {
-            popup.classList.add('hidden');
-        } else {
-            popup.classList.remove('hidden');
+    // Since the button is dynamic, we need to observe it whenever it appears
+    const checkExist = setInterval(() => {
+        const ctaButton = document.querySelector('.cta-button-main');
+        if (ctaButton) {
+            observer.observe(ctaButton);
+            clearInterval(checkExist);
         }
-    }
-});
+    }, 500);
+}
+
+initCTAObserver();
