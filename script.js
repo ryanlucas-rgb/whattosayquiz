@@ -456,9 +456,8 @@ window.addEventListener('scroll', () => {
     if (popup && ctaButton) {
         const buttonRect = ctaButton.getBoundingClientRect();
 
-        // Exact trigger: When the button starts entering the "popup zone" at the bottom
-        // window.innerHeight - 150 is roughly where the fixed bubble is.
-        if (buttonRect.top < window.innerHeight - 130) {
+        // Advancing the trigger: trigger when the button is further away from the bottom (approx 250px)
+        if (buttonRect.top < window.innerHeight - 250) {
             popup.classList.add('hidden');
         } else {
             popup.classList.remove('hidden');
