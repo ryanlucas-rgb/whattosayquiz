@@ -455,12 +455,13 @@ window.addEventListener('scroll', () => {
 
     if (popup && ctaButton) {
         const buttonRect = ctaButton.getBoundingClientRect();
-        // Fades out as the button approaches the popup's area at the bottom
-        if (buttonRect.top < window.innerHeight - 100) {
-            popup.style.opacity = '0';
-            popup.style.pointerEvents = 'none';
+
+        // Exact trigger: When the button starts entering the "popup zone" at the bottom
+        // window.innerHeight - 150 is roughly where the fixed bubble is.
+        if (buttonRect.top < window.innerHeight - 130) {
+            popup.classList.add('hidden');
         } else {
-            popup.style.opacity = '1';
+            popup.classList.remove('hidden');
         }
     }
 });
