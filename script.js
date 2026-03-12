@@ -508,6 +508,46 @@ function startTimer() {
     }, 1000);
 }
 
+// ── Utmify: Lê UTMs da URL atual + fallback do localStorage/cookie da Utmify
+function getUTMParams() {
+    const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'src'];
+    const params = new URLSearchParams();
+
+    // 1. Prioridade: UTMs da URL atual (ex: ?utm_source=facebook)
+    const currentParams = new URLSearchParams(window.location.search);
+    utmKeys.forEach(key => {
+        if (currentParams.get(key)) {
+            params.set(key, currentParams.get(key));
+        }
+    });
+
+    // 2. Fallback: localStorage salvo pela Utmify
+    try {
+        const utmifyStored = localStorage.getItem('utmify_utms');
+        if (utmifyStored) {
+            const stored = JSON.parse(utmifyStored);
+            utmKeys.forEach(key => {
+                if (!params.get(key) && stored[key]) {
+                    params.set(key, stored[key]);
+                }
+            });
+        }
+    } catch (e) { /* silencioso */ }
+
+    // 3. Fallback: cookies salvos pela Utmify
+    try {
+        const cookieStr = document.cookie;
+        utmKeys.forEach(key => {
+            if (!params.get(key)) {
+                const match = cookieStr.match(new RegExp('(?:^|;\\s*)' + key + '=([^;]*)'));
+                if (match) params.set(key, decodeURIComponent(match[1]));
+            }
+        });
+    } catch (e) { /* silencioso */ }
+
+    return params.toString();
+}
+
 function submitOffer() {
     const submitBtn = document.querySelector('.cta-button-main') || document.querySelector('.btn-primary');
     if (!submitBtn) return;
@@ -531,7 +571,10 @@ function submitOffer() {
 
     // Small delay to ensure pixel fires before redirect
     setTimeout(() => {
-        window.location.href = "https://ggcheckout.com.br/checkout/v4/SmHqADkYWc3F42vEE3GC";
+        const baseCheckout = "https://ggcheckout.com.br/checkout/v4/SmHqADkYWc3F42vEE3GC";
+        const utmString = getUTMParams();
+        const finalUrl = utmString ? `${baseCheckout}?${utmString}` : baseCheckout;
+        window.location.href = finalUrl;
     }, 800);
 }
 
