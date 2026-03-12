@@ -508,46 +508,6 @@ function startTimer() {
     }, 1000);
 }
 
-// ── Utmify: Lê UTMs da URL atual + fallback do localStorage/cookie da Utmify
-function getUTMParams() {
-    const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'src'];
-    const params = new URLSearchParams();
-
-    // 1. Prioridade: UTMs da URL atual (ex: ?utm_source=facebook)
-    const currentParams = new URLSearchParams(window.location.search);
-    utmKeys.forEach(key => {
-        if (currentParams.get(key)) {
-            params.set(key, currentParams.get(key));
-        }
-    });
-
-    // 2. Fallback: localStorage salvo pela Utmify
-    try {
-        const utmifyStored = localStorage.getItem('utmify_utms');
-        if (utmifyStored) {
-            const stored = JSON.parse(utmifyStored);
-            utmKeys.forEach(key => {
-                if (!params.get(key) && stored[key]) {
-                    params.set(key, stored[key]);
-                }
-            });
-        }
-    } catch (e) { /* silencioso */ }
-
-    // 3. Fallback: cookies salvos pela Utmify
-    try {
-        const cookieStr = document.cookie;
-        utmKeys.forEach(key => {
-            if (!params.get(key)) {
-                const match = cookieStr.match(new RegExp('(?:^|;\\s*)' + key + '=([^;]*)'));
-                if (match) params.set(key, decodeURIComponent(match[1]));
-            }
-        });
-    } catch (e) { /* silencioso */ }
-
-    return params.toString();
-}
-
 function submitOffer() {
     const submitBtn = document.querySelector('.cta-button-main') || document.querySelector('.btn-primary');
     if (!submitBtn) return;
@@ -569,12 +529,28 @@ function submitOffer() {
     submitBtn.textContent = 'Redirecting...';
     submitBtn.disabled = true;
 
-    // Small delay to ensure pixel fires before redirect
+    // ── Utmify: Usar <a> tag real para que o Utmify intercepte o clique
+    // e injete as UTMs automaticamente na URL antes de navegar.
+    // window.location.href NÃO é interceptado pelo Utmify — apenas cliques em <a> tags.
     setTimeout(() => {
         const baseCheckout = "https://ggcheckout.com.br/checkout/v4/SmHqADkYWc3F42vEE3GC";
-        const utmString = getUTMParams();
-        const finalUrl = utmString ? `${baseCheckout}?${utmString}` : baseCheckout;
-        window.location.href = finalUrl;
+
+        // Cria um <a> invisível apontando para o checkout
+        const link = document.createElement('a');
+        link.href = baseCheckout;
+        link.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;';
+        document.body.appendChild(link);
+
+        // Dispara o clique — o Utmify intercepta aqui e injeta UTMs no href
+        link.click();
+
+        // Fallback de segurança: se ainda estiver na página após 600ms,
+        // redireciona diretamente (lê o href que o Utmify pode ter atualizado)
+        setTimeout(() => {
+            const finalUrl = link.href || baseCheckout;
+            if (document.body.contains(link)) document.body.removeChild(link);
+            window.location.href = finalUrl;
+        }, 600);
     }, 800);
 }
 
