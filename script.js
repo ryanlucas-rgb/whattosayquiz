@@ -1,4 +1,21 @@
 // script.js
+
+// ─── Meta Pixel Helper ───────────────────────────────────────────────────────
+function trackEvent(eventName, params) {
+    if (typeof fbq !== 'undefined') {
+        if (params) {
+            fbq('trackCustom', eventName, params);
+        } else {
+            fbq('trackCustom', eventName);
+        }
+    }
+}
+function trackStandard(eventName, params) {
+    if (typeof fbq !== 'undefined') {
+        fbq('track', eventName, params || {});
+    }
+}
+// ─────────────────────────────────────────────────────────────────────────────
 const quizData = [
     {
         type: 'intro',
@@ -105,6 +122,12 @@ function buildAndAppendNewCard(stepData) {
     card.className = 'card fade-enter';
 
     if (stepData.type === 'intro') {
+        // ── Pixel: Usuário viu a página de intro (topo do funil)
+        trackStandard('ViewContent', {
+            content_name: 'Quiz Intro - What To Say',
+            content_category: 'Quiz Funnel'
+        });
+
         card.innerHTML = `
             <h1 class="headline">${stepData.headline}</h1>
             <p class="headline-subtext">Maybe it's not your experience, Maybe it's your communication.</p>
@@ -113,7 +136,7 @@ function buildAndAppendNewCard(stepData) {
                 <img src="./Capa .png" alt="Capa do Quiz" style="width: 100%; max-width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-md); display: block;">
             </div>
             <p class="sub-headline">${stepData.subheadline}</p>
-            <button class="btn-primary" style="background-color: #2b51ff; box-shadow: 0 4px 14px 0 rgba(43, 81, 255, 0.4);" onclick="nextStep()">${stepData.buttonText}</button>
+            <button class="btn-primary" style="background-color: #2b51ff; box-shadow: 0 4px 14px 0 rgba(43, 81, 255, 0.4);" onclick="startQuiz()">${stepData.buttonText}</button>
         `;
     } else if (stepData.type === 'question') {
         const totalQuestions = quizData.filter(q => q.type === 'question').length;
@@ -204,6 +227,12 @@ function buildAndAppendNewCard(stepData) {
             `;
         }
     } else if (stepData.type === 'loading') {
+        // ── Pixel: Quiz concluído — todas as perguntas respondidas
+        trackEvent('QuizCompleted', {
+            quiz_name: 'What To Say - Interview Quiz',
+            total_questions: quizData.filter(q => q.type === 'question').length
+        });
+
         // Transition / loading screen
         card.classList.add('loading-card');
         card.innerHTML = `
@@ -219,6 +248,19 @@ function buildAndAppendNewCard(stepData) {
         }, 3000);
 
     } else if (stepData.type === 'postquiz-cta') {
+        // ── Pixel: Usuário chegou na página de oferta (CTA)
+        trackStandard('ViewContent', {
+            content_name: 'CTA - What To Say Offer',
+            content_category: 'Sales Page',
+            value: 7.00,
+            currency: 'USD'
+        });
+        trackEvent('CTAViewed', {
+            quiz_name: 'What To Say - Interview Quiz',
+            offer_price: 7.00,
+            currency: 'USD'
+        });
+
         // Override card styles for dark CTA
         card.classList.add('cta-card-dark');
 
@@ -363,6 +405,18 @@ function updateProgress() {
     }
 }
 
+// ── Pixel: Disparado quando usuário clica em "Start Quiz"
+function startQuiz() {
+    trackStandard('Lead', {
+        content_name: 'Quiz Started - What To Say',
+        content_category: 'Quiz Funnel'
+    });
+    trackEvent('QuizStarted', {
+        quiz_name: 'What To Say - Interview Quiz'
+    });
+    nextStep();
+}
+
 function nextStep() {
     if (currentStep < quizData.length - 1) {
         currentStep++;
@@ -372,9 +426,21 @@ function nextStep() {
 
 function handleSelect(optionIndex) {
     const stepData = quizData[currentStep];
+    const selectedAnswer = stepData.options[optionIndex];
+
     answers.push({
         question: stepData.question,
-        answer: stepData.options[optionIndex]
+        answer: selectedAnswer
+    });
+
+    // ── Pixel: Resposta de cada pergunta do quiz (Q2 a Q5)
+    const questionNumber = currentStep;
+    trackEvent(`QuizAnswer_Q${questionNumber}`, {
+        quiz_name: 'What To Say - Interview Quiz',
+        question_number: questionNumber,
+        question_text: stepData.question.substring(0, 100),
+        answer_selected: selectedAnswer.substring(0, 100),
+        answer_index: optionIndex
     });
 
     // Visual selection animation
@@ -394,9 +460,20 @@ function handleSelect(optionIndex) {
 
 function handleGenderSelect(optionIndex, clickedCard) {
     const stepData = quizData[currentStep];
+    const selectedAnswer = stepData.options[optionIndex];
+
     answers.push({
         question: stepData.question,
-        answer: stepData.options[optionIndex]
+        answer: selectedAnswer
+    });
+
+    // ── Pixel: Resposta da Q1 (gênero) — segmentação de audiência
+    trackEvent('QuizAnswer_Q1', {
+        quiz_name: 'What To Say - Interview Quiz',
+        question_number: 1,
+        question_text: stepData.question.substring(0, 100),
+        answer_selected: selectedAnswer,
+        answer_index: optionIndex
     });
 
     // Disable all cards and mark selected
@@ -435,10 +512,24 @@ function submitOffer() {
     const submitBtn = document.querySelector('.cta-button-main') || document.querySelector('.btn-primary');
     if (!submitBtn) return;
 
+    // ── Pixel: Usuário clicou no botão de compra — intenção de checkout
+    trackStandard('InitiateCheckout', {
+        content_name: 'What To Say - Strategic Interview Protocol',
+        content_category: 'Digital Product',
+        num_items: 1,
+        value: 7.00,
+        currency: 'USD'
+    });
+    trackEvent('CheckoutButtonClicked', {
+        quiz_name: 'What To Say - Interview Quiz',
+        offer_price: 7.00,
+        currency: 'USD'
+    });
+
     submitBtn.textContent = 'Redirecting...';
     submitBtn.disabled = true;
 
-    // Direct redirection to the checkout link
+    // Small delay to ensure pixel fires before redirect
     setTimeout(() => {
         window.location.href = "https://ggcheckout.com.br/checkout/v4/SmHqADkYWc3F42vEE3GC";
     }, 800);
